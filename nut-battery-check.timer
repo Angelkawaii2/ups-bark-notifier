@@ -1,0 +1,11 @@
+[Unit]
+Description=Run the UPS battery checker once per minute
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=60s
+AccuracySec=5s
+Unit=nut-battery-check.service
+
+[Install]
+WantedBy=timers.target

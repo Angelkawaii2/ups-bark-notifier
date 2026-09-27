@@ -1,0 +1,24 @@
+# Live credentials and host-specific NUT configuration
+/bark.conf
+/upsd.users
+/upsmon.conf
+/nut.conf
+/ups.conf
+/upsd.conf
+/ups-policy.conf
+
+# Local secrets, private keys, and generated signing material
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.gpg
+*.asc
+
+# Editor, backup, and runtime artifacts
+*.bak
+*.pre-*
+*.swp
+*~
+.DS_Store

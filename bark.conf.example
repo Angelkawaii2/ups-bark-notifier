@@ -1,0 +1,5 @@
+# Install as /etc/nut/bark.conf, owner root:nut, mode 0640.
+# Use the HTTPS /push endpoint; keep the device key in JSON, not in this URL.
+BARK_URL='https://api.day.app/push'
+BARK_KEY='REPLACE_WITH_YOUR_BARK_DEVICE_KEY'
+BARK_GROUP='UPS'

@@ -1,0 +1,21 @@
+# Install as /etc/nut/upssched.conf; keep this file ASCII-only.
+CMDSCRIPT /usr/local/sbin/nut-upssched-cmd
+PIPEFN /run/nut-upssched/upssched.pipe
+LOCKFN /run/nut-upssched/upssched.lock
+
+# The battery-check systemd timer enforces MAX_ON_BATTERY_TIME from
+# /etc/nut/ups-policy.conf (seconds), avoiding a duplicated timeout value here.
+AT ONBATT * EXECUTE onbatt-start
+AT ONBATT * EXECUTE onbatt-notify
+
+AT ONLINE * EXECUTE online
+
+AT LOWBATT * EXECUTE lowbatt
+AT FSD * EXECUTE fsd
+
+# Delay communication failure alerts; brief flaps are suppressed.
+AT COMMBAD * CANCEL-TIMER commbad-alert
+AT COMMBAD * EXECUTE commbad-start
+AT COMMBAD * START-TIMER commbad-alert 30
+AT COMMOK * CANCEL-TIMER commbad-alert
+AT COMMOK * EXECUTE commok

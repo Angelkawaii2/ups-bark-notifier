@@ -1,0 +1,23 @@
+# Install as /etc/nut/ups-policy.conf, owner root:nut, mode 0640.
+UPS_NAME=ups
+UPS_TARGET=ups@localhost
+
+# Custom safe-shutdown threshold; NUT's native LOWBATT handling remains enabled.
+BATTERY_SHUTDOWN_PERCENT=30
+
+# Maximum continuous on-battery time, in seconds (2 hours). The systemd
+# checker runs once per minute, so a timeout may be acted on up to 60 seconds
+# later.
+MAX_ON_BATTERY_TIME=7200
+
+# While OB, notify once for every this many percentage points lost from the
+# battery charge observed when the outage starts. Example: start at 100% sends
+# at 90%, 80%, 70% ...; start at 82% sends at 72%, 62%, 52% ...
+BATTERY_NOTIFY_STEP_PERCENT=10
+
+# A full-charge notification is sent after ONLINE once battery.charge reaches
+# this level. Set to 100 for a true fully-charged notification.
+BATTERY_FULL_PERCENT=100
+
+# Test-only switch. Keep 0 in normal operation.
+SHUTDOWN_DRY_RUN=0

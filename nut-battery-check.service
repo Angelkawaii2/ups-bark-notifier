@@ -1,0 +1,8 @@
+[Unit]
+Description=Check UPS battery threshold and charge-notice milestones
+After=nut-server.service
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/local/sbin/nut-battery-check
