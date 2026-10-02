@@ -48,6 +48,13 @@ if an outage was shorter than one timer interval. The time condition can be
 acted on up to about 60 seconds after its configured limit. There is no
 background `sleep` process.
 
+For communication failures, `upssched` starts a 900-second (15-minute) timer
+on COMMBAD and cancels it on COMMOK. The callback records the start of the
+current failure and ignores stale timers from earlier failures. Bark sends a
+COMMBAD notice only while the same failure is still active after 15 minutes.
+COMMOK sends a recovery notice only when that failure already produced a
+COMMBAD notice. A shorter interruption produces neither Bark notification.
+
 ## Files
 
 | File | Installed path / purpose |
@@ -55,7 +62,7 @@ background `sleep` process.
 | `nut-battery-check.sh` | `/usr/local/sbin/nut-battery-check`; one-shot charge/time policy checker. |
 | `nut-shutdown-request.sh` | `/usr/local/sbin/nut-shutdown-request`; verifies OB and the reason, serializes requests, then calls `upsmon -c fsd`. |
 | `nut-bark.sh` | `/usr/local/sbin/nut-bark`; formats and sends Bark JSON. |
-| `nut-upssched-cmd.sh` | `/usr/local/sbin/nut-upssched-cmd`; handles NUT notifications and communication debounce. |
+| `nut-upssched-cmd.sh` | `/usr/local/sbin/nut-upssched-cmd`; handles NUT notifications and 15-minute communication debounce. |
 | `bark.conf.example` | Safe template for `/etc/nut/bark.conf`; replace the placeholder outside Git. |
 | `ups-policy.conf.example` | Template for `/etc/nut/ups-policy.conf`. |
 | `upssched.conf.example` | Template for `/etc/nut/upssched.conf`. |
@@ -160,9 +167,15 @@ upsc ups@localhost
 
 Change thresholds in `/etc/nut/ups-policy.conf`. After changing a value, the
 next one-shot checker run reads it; no timer restart is needed.
+The communication delay is set by `START-TIMER commbad-alert 900` in
+`/etc/nut/upssched.conf`. Deploy its matching callback script when changing
+this setting.
 
 ## Safe verification
 
+- `bash tests/comm-debounce.sh` checks short recovery, stale timers, repeated
+  COMMBAD, and one long-failure/recovery pair using a temporary state
+  directory and a Bark stub. It sends no real push.
 - A Bark connectivity check can be sent with
   `/usr/local/sbin/nut-bark TEST`; this sends a real notification.
 - For a controlled shutdown-policy dry run, set

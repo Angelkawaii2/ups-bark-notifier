@@ -20,6 +20,10 @@ before changing behavior.
   bounded best-effort Bark notice, and enters the regular NUT sequence using
   `upsmon -c fsd`. Do not replace this with a direct `poweroff` or bypass NUT's
   `SHUTDOWNCMD`/`POWERDOWNFLAG` path.
+- Communication alerts use `upssched`'s `commbad-alert` timer, set to 900
+  seconds in `upssched.conf.example`. `nut-upssched-cmd.sh` reads that deployed
+  timer value and tracks whether the same outage remains active. COMMOK must
+  stay silent if no COMMBAD alert was sent.
 - Bark credentials are not source files. The host reads
   `/etc/nut/bark.conf`; `.gitignore` excludes the workspace `bark.conf`.
   `bark.conf.example` must contain placeholders only.

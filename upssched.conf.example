@@ -13,9 +13,9 @@ AT ONLINE * EXECUTE online
 AT LOWBATT * EXECUTE lowbatt
 AT FSD * EXECUTE fsd
 
-# Delay communication failure alerts; brief flaps are suppressed.
-AT COMMBAD * CANCEL-TIMER commbad-alert
+# Alert only after 900 seconds (15 minutes) of continuous bad communication.
+# Repeated COMMBAD events must not cancel the first timer.
 AT COMMBAD * EXECUTE commbad-start
-AT COMMBAD * START-TIMER commbad-alert 30
+AT COMMBAD * START-TIMER commbad-alert 900
 AT COMMOK * CANCEL-TIMER commbad-alert
 AT COMMOK * EXECUTE commok

@@ -12,6 +12,9 @@
 - During OB, Bark notifies for every 10 percentage-point charge drop from the
   outage baseline. After ONLINE, it sends a recovery alert and one full-charge
   alert at 100%.
+- A communication failure produces a Bark COMMBAD alert only after 15 minutes
+  without COMMOK. Recovery during that interval produces no Bark alert; after
+  an alert, COMMOK produces one recovery notice.
 - Custom shutdown validates live `OB`, threshold/time, and `nut-monitor`; it
   sends bounded best-effort Bark, then calls `upsmon -c fsd`. NUT's native
   `LOWBATT → FSD → SHUTDOWNCMD` protection remains enabled.
